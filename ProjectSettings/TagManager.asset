@@ -7,6 +7,9 @@ TagManager:
   - Skill 1
   - Skill 2
   - Skill 3
+  - UI
+  - bgm
+  - test
   layers:
   - Default
   - TransparentFX

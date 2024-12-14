@@ -1,21 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class P_SkillHandler : MonoBehaviour
 {
     [Header("Require Components")]
     [SerializeField] private P_Stat stat;
     [SerializeField] private Skill_Stat skill;
+    [SerializeField]private GameObject shield;
 
     private int skillType;
-    private bool isOffensiveSkill;
-    private bool isUsingSkill;
     private Rigidbody2D rb;
+    private bool isUsingSkill;
+    //private bool isOffensiveSkill;
 
+
+    /* Monobehavior methods *////////////////////////////////////////////////////////////////////////////
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -23,78 +24,84 @@ public class P_SkillHandler : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         CollectSkill(collision);
+        CollisionHandler(collision);
     }
 
 
+    /* Other handlers */
+    private void CollisionHandler(Collider2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy") && !shield.activeInHierarchy)
+            stat.CurrentDistance -= stat.CollisionDamageValue;
+    }
     private void CollectSkill(Collider2D collision)
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Skill"))
-        {
-            AssignSkillType(collision.gameObject);
-        }
+            AssignSkillType(collision.gameObject.tag);
     }
-    private void AssignSkillType(GameObject skill)
+    private void AssignSkillType(string skillTag)  // Get skill type by tag
     {
-        if (skillType == 0)
+        if (skillType != 0)
+            return;
+
+        switch (skillTag)
         {
-            switch (skill.tag)
-            {
-                case "Skill 1":
-                    skillType = 1;
-                    break;
-                case "Skill 2":
-                    skillType = 2;
-                    break;
-                case "Skill 3":
-                    skillType = 3;
-                    break;
-            }
-            isOffensiveSkill = false;
+            case "Skill 1":
+                skillType = 1;
+                break;
+            case "Skill 2":
+                skillType = 2;
+                break;
+            case "Skill 3":
+                skillType = 3;
+                break;
         }
+        //isOffensiveSkill = false;
     }
     public void UseSkill()
     {
-        if (skillType != 0 && !isUsingSkill)
+        if (skillType == 0 || isUsingSkill)
+            return;
+
+        switch (skillType)
         {
-            isUsingSkill = true;
-            switch (skillType)
-            {
-                case 1:
-                    ShrinkSkill();
-                    break;
-                case 2:
-                    ShieldSkill();
-                    break;
-                case 3:
-                    SpeedSkill();
-                    break;
-            }
-            skillType = 0;
+            case 1:
+                UseShrinkSkill();
+                break;
+            case 2:
+                UseShieldSkill();
+                break;
+            case 3:
+                UseSpeedSkill();
+                break;
         }
+        isUsingSkill = true;
+        skillType = 0;
     }
 
 
-    private void SpeedSkill()
+    /* Skills behavior handlers */////////////////////////////////////////////////////////////////////
+    private void UseSpeedSkill()
+    {
+        
+    }
+    private void SpeedSkillRevert()
     {
         isUsingSkill = false;
     }
-    private void SpeedSkillRevert()
-    { 
-    
-    }
-    private void ShieldSkill()
+    private void UseShieldSkill()
     {
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"));
+        shield.SetActive(true);
         stat.CurrentMovementSpeed = skill.ShieldMoveSpeed;
         Invoke("ShieldSkillRevert", skill.ShieldDuration);
     }
     private void ShieldSkillRevert()
     {
-        isUsingSkill = false;
+        shield.SetActive(false);
         stat.CurrentMovementSpeed = stat.NormalMovementSpeed;
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), false);
+        isUsingSkill = false;
     }
-    private void ShrinkSkill()
+    private void UseShrinkSkill()
     {
         transform.localScale -= new Vector3(skill.ShrinkScaleMinus, skill.ShrinkScaleMinus);
         stat.CurrentMovementSpeed = skill.ShrinkMoveSpeed;

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9059e3a7b48a2d40893ae1a69a1f06f, type: 3}
   m_Name: P_Stat_2
   m_EditorClassIdentifier: 
-  normalMovementSpeed: 5
+  normalMovementSpeed: 10
   collisionDamageValue: 3

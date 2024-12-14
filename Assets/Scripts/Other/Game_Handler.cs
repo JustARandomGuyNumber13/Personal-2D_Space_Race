@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Game_Handler : MonoBehaviour
 {
@@ -26,19 +27,12 @@ public class Game_Handler : MonoBehaviour
     {
         if (player1.CurrentDistance >= trackDistance || player2.CurrentDistance >= trackDistance)
         {
-            if (player1.CurrentDistance < player2.CurrentDistance)
-            {
-                print("Player 2 Win!");
-            }
-            else if (player1.CurrentDistance == player2.CurrentDistance)
-            {
-                print("Draw!");
-            }
+            if (player1.CurrentDistance > player2.CurrentDistance)
+                SceneManager.LoadScene("2_Player_1_Win");
+            else if (player1.CurrentDistance < player2.CurrentDistance)
+                SceneManager.LoadScene("3_Player_2_Win");
             else
-            {
-                print("Player 1 Win!");
-            }
-            Time.timeScale = 0;
+                SceneManager.LoadScene("4_Draw");
         }
     }
     private void UpdateDistance()
@@ -59,6 +53,4 @@ public class Game_Handler : MonoBehaviour
         ui2.Public_SetMaxDistance(trackDistance);
         player2.CurrentDistance = 0;
     }
-
-    
 }

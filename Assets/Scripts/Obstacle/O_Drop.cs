@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class O_Drop : MonoBehaviour
@@ -19,7 +18,7 @@ public class O_Drop : MonoBehaviour
 
     protected Rigidbody2D rb;
 
-    protected void Awake()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
@@ -29,14 +28,14 @@ public class O_Drop : MonoBehaviour
         RotateOnStart();
         LaunchHorizontalOnStart();
     }
-    protected void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         int layer = collision.gameObject.layer;
         CheckWall(layer);
         CheckDestroy(layer);
     }
 
-    protected void DropDown()
+    private void DropDown()
     { 
         float dropSpeed = Random.Range(minDropSpeed, maxDropSpeed);
         rb.velocity = new Vector2 (rb.velocity.x, -dropSpeed);
