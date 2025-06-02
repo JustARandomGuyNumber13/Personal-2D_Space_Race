@@ -38,7 +38,7 @@ public class O_Drop : MonoBehaviour
     private void DropDown()
     { 
         float dropSpeed = Random.Range(minDropSpeed, maxDropSpeed);
-        rb.velocity = new Vector2 (rb.velocity.x, -dropSpeed);
+        rb.linearVelocity = new Vector2 (rb.linearVelocity.x, -dropSpeed);
     }
     private void RotateOnStart()
     {
@@ -62,7 +62,7 @@ public class O_Drop : MonoBehaviour
     {
         if (layer == LayerMask.NameToLayer("Wall"))
         {
-            rb.velocity = new Vector2(-rb.velocity.x, rb.velocity.y);
+            rb.linearVelocity = new Vector2(-rb.linearVelocity.x, rb.linearVelocity.y);
         }
     }
     private void CheckDestroy(int layer)

@@ -41,6 +41,6 @@ public class P_PlayerHandler : MonoBehaviour
     // Collision handler is at P_SkillHandler.cs
     private void PlayerMovement()
     {
-        rb.velocity = movementInput * stat.CurrentMovementSpeed;
+        rb.linearVelocity = movementInput * stat.CurrentMovementSpeed;
     }
 }

@@ -33,7 +33,7 @@ public class O_Chase : O_Drop
     }
     private void ChasePlayer()
     {
-        rb.velocity = new Vector2(transform.position.x < player.position.x ? xChaseSpeed : -xChaseSpeed, rb.velocity.y);
+        rb.linearVelocity = new Vector2(transform.position.x < player.position.x ? xChaseSpeed : -xChaseSpeed, rb.linearVelocity.y);
     }
     private void LookAtPlayer()
     {
